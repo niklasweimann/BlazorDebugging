@@ -1,12 +1,20 @@
 ﻿@page "/"
+@inject IJSRuntime JsRuntime
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
-<p @ref="exampleRef">Test</p>
+<p @ref="_exampleRef">Test</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" Reference="exampleRef"/>
+<SurveyPrompt Title="How is Blazor working for you?" Reference="_exampleRef"/>
+<button @onclick="HandleClick">Click 2</button>
 
 @code
 {
+    ElementReference _exampleRef;
+
+    public void HandleClick(MouseEventArgs mouseEventArgs)
+    {
+        ((JSInProcessRuntime)JsRuntime).InvokeVoid("foo", _exampleRef, "foo");
+    }
 }

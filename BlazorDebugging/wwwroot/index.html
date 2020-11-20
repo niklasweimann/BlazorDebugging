@@ -21,6 +21,7 @@
 <script src="_framework/blazor.webassembly.js"></script>
 <script>
     window.foo = (ele, foo) => {
+        console.log(ele);
         ele.innerHTML = ele.innerHTML + foo;
     }
 </script>

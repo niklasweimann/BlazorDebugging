@@ -11,7 +11,6 @@
 
 <button @onclick="HandleClick">Click</button>
 
-<span>@X</span>
 @inject IJSRuntime JsRuntime
 @code {
     // Demonstrates how a parent component can supply parameters
@@ -21,24 +20,19 @@
     [Parameter]
     public ElementReference Reference { get; set; }
 
-    public delegate void MyEventHandler(string foo);
 
-    public event MyEventHandler SomethingHappened;
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        SomethingHappened += HandleSomethingHappened;
+        SingeltonFoo.Instance.SomethingHappened += HandleSomethingHappened;
     }
 
-    public void HandleSomethingHappened(string foo) => ((JSInProcessRuntime) JsRuntime).InvokeVoid("foo", Reference, foo);
-
-
-    public double X { get; set; }
+    public void HandleSomethingHappened(string foo) => ((JSInProcessRuntime)JsRuntime).InvokeVoid("foo", Reference, foo);
 
     public void HandleClick(MouseEventArgs mouseEventArgs)
     {
-        X = mouseEventArgs.ClientX;
-        SomethingHappened?.Invoke(mouseEventArgs.Type);
+        ((JSInProcessRuntime) JsRuntime).InvokeVoid("foo", Reference, mouseEventArgs.Type);
+        SingeltonFoo.Instance.OnSomethingHappend(mouseEventArgs.Type);
     }
 }
