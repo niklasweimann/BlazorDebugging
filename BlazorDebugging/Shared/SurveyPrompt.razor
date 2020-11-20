@@ -1,38 +1,17 @@
-﻿<div class="alert alert-secondary mt-4" role="alert">
-    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
-    <strong>@Title</strong>
-
-    <span class="text-nowrap">
-        Please take our
-        <a target="_blank" class="font-weight-bold" href="https://go.microsoft.com/fwlink/?linkid=2127996">brief survey</a>
-    </span>
-    and tell us what you think.
-</div>
-
-<button @onclick="HandleClick">Click</button>
+﻿<button @onclick="HandleClick">Click</button>
 
 @inject IJSRuntime JsRuntime
 @code {
-    // Demonstrates how a parent component can supply parameters
-    [Parameter]
-    public string Title { get; set; }
-
     [Parameter]
     public ElementReference Reference { get; set; }
 
-
-
-    protected override void OnInitialized()
+    protected override void OnAfterRender(bool firstRender)
     {
-        base.OnInitialized();
-        SingeltonFoo.Instance.SomethingHappened += HandleSomethingHappened;
-    }
+        base.OnAfterRender(firstRender);
+        if(firstRender)
+            SingeltonFoo.Instance.SomethingHappened += HandleSomethingHappened;
 
+    }
     public void HandleSomethingHappened(string foo) => ((JSInProcessRuntime)JsRuntime).InvokeVoid("foo", Reference, foo);
-
-    public void HandleClick(MouseEventArgs mouseEventArgs)
-    {
-        ((JSInProcessRuntime) JsRuntime).InvokeVoid("foo", Reference, mouseEventArgs.Type);
-        SingeltonFoo.Instance.OnSomethingHappend(mouseEventArgs.Type);
-    }
+    public void HandleClick(MouseEventArgs mouseEventArgs) => SingeltonFoo.Instance.OnSomethingHappend("Child Clicked! ");
 }

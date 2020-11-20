@@ -4,17 +4,14 @@
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
-<p @ref="_exampleRef">Test</p>
+<p @ref="ExampleRef">Test</p>
 
-<SurveyPrompt Title="How is Blazor working for you?" Reference="_exampleRef"/>
+<SurveyPrompt Reference="ExampleRef"/>
 <button @onclick="HandleClick">Click 2</button>
 
 @code
 {
-    ElementReference _exampleRef;
+    public ElementReference ExampleRef;
 
-    public void HandleClick(MouseEventArgs mouseEventArgs)
-    {
-        ((JSInProcessRuntime)JsRuntime).InvokeVoid("foo", _exampleRef, "foo");
-    }
+    public void HandleClick(MouseEventArgs mouseEventArgs) => ((JSInProcessRuntime)JsRuntime).InvokeVoid("foo", ExampleRef, "Parent Clicked! ");
 }
